@@ -81,6 +81,32 @@ public class DefaultJwtParser implements JwtParser {
 
     private long allowedClockSkewMillis = 0;
 
+    /**
+     * @deprecated for backward compatibility only, see other constructors.
+     */
+    @Deprecated
+    public DefaultJwtParser() { }
+
+    DefaultJwtParser(SigningKeyResolver signingKeyResolver,
+                     Key key,
+                     byte[] keyBytes,
+                     Clock clock,
+                     long allowedClockSkewMillis,
+                     Claims expectedClaims,
+                     Decoder<String, byte[]> base64UrlDecoder,
+                     Deserializer<Map<String, ?>> deserializer,
+                     CompressionCodecResolver compressionCodecResolver) {
+        this.signingKeyResolver = signingKeyResolver;
+        this.key = key;
+        this.keyBytes = keyBytes;
+        this.clock = clock;
+        this.allowedClockSkewMillis = allowedClockSkewMillis;
+        this.expectedClaims = expectedClaims;
+        this.base64UrlDecoder = base64UrlDecoder;
+        this.deserializer = deserializer;
+        this.compressionCodecResolver = compressionCodecResolver;
+    }
+
     @Override
     public JwtParser deserializeJsonWith(Deserializer<Map<String, ?>> deserializer) {
         Assert.notNull(deserializer, "deserializer cannot be null.");

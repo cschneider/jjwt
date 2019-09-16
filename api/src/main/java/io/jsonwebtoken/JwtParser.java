@@ -41,7 +41,9 @@ public interface JwtParser {
      * @return the parser method for chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireId(String)}
      */
+    @Deprecated
     JwtParser requireId(String id);
 
     /**
@@ -50,10 +52,12 @@ public interface JwtParser {
      * JWT is invalid and may not be used.
      *
      * @param subject
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireSubject(String)}
      */
+    @Deprecated
     JwtParser requireSubject(String subject);
 
     /**
@@ -62,10 +66,12 @@ public interface JwtParser {
      * JWT is invalid and may not be used.
      *
      * @param audience
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireAudience(String)}
      */
+    @Deprecated
     JwtParser requireAudience(String audience);
 
     /**
@@ -74,10 +80,12 @@ public interface JwtParser {
      * JWT is invalid and may not be used.
      *
      * @param issuer
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireIssuer(String)}
      */
+    @Deprecated
     JwtParser requireIssuer(String issuer);
 
     /**
@@ -86,10 +94,12 @@ public interface JwtParser {
      * JWT is invalid and may not be used.
      *
      * @param issuedAt
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireIssuedAt(Date)}
      */
+    @Deprecated
     JwtParser requireIssuedAt(Date issuedAt);
 
     /**
@@ -98,10 +108,12 @@ public interface JwtParser {
      * JWT is invalid and may not be used.
      *
      * @param expiration
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireExpiration(Date)}
      */
+    @Deprecated
     JwtParser requireExpiration(Date expiration);
 
     /**
@@ -113,7 +125,9 @@ public interface JwtParser {
      * @return the parser for method chaining
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#requireNotBefore(Date)}
      */
+    @Deprecated
     JwtParser requireNotBefore(Date notBefore);
 
     /**
@@ -123,10 +137,12 @@ public interface JwtParser {
      *
      * @param claimName
      * @param value
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
+     * @deprecated see {@link JwtParserBuilder#require(String, Object)}
      */
+    @Deprecated
     JwtParser require(String claimName, Object value);
 
     /**
@@ -134,9 +150,11 @@ public interface JwtParser {
      * The parser uses a default Clock implementation that simply returns {@code new Date()} when called.
      *
      * @param clock a {@code Clock} object to return the timestamp to use when validating the parsed JWT.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @since 0.7.0
+     * @deprecated see {@link JwtParserBuilder#setClock(Clock)}
      */
+    @Deprecated
     JwtParser setClock(Clock clock);
 
     /**
@@ -144,9 +162,11 @@ public interface JwtParser {
      * and {@code nbf} claims.
      *
      * @param seconds the number of seconds to tolerate for clock skew when verifying {@code exp} or {@code nbf} claims.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @since 0.7.0
+     * @deprecated see {@link JwtParserBuilder#setAllowedClockSkewSeconds(long)}
      */
+    @Deprecated
     JwtParser setAllowedClockSkewSeconds(long seconds);
 
     /**
@@ -160,8 +180,10 @@ public interface JwtParser {
      *
      * @param key the algorithm-specific signature verification key used to validate any discovered JWS digital
      *            signature.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
+     * @deprecated see {@link JwtParserBuilder#setSigningKey(byte[])}
      */
+    @Deprecated
     JwtParser setSigningKey(byte[] key);
 
     /**
@@ -201,8 +223,10 @@ public interface JwtParser {
      *
      * @param base64EncodedSecretKey the BASE64-encoded algorithm-specific signature verification key to use to validate
      *                               any discovered JWS digital signature.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
+     * @deprecated see {@link JwtParserBuilder#setSigningKey(String)}
      */
+    @Deprecated
     JwtParser setSigningKey(String base64EncodedSecretKey);
 
     /**
@@ -216,8 +240,10 @@ public interface JwtParser {
      *
      * @param key the algorithm-specific signature verification key to use to validate any discovered JWS digital
      *            signature.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
+     * @deprecated see {@link JwtParserBuilder#setSigningKey(Key)}
      */
+    @Deprecated
     JwtParser setSigningKey(Key key);
 
     /**
@@ -245,9 +271,11 @@ public interface JwtParser {
      * methods.</p>
      *
      * @param signingKeyResolver the signing key resolver used to retrieve the signing key.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @since 0.4
+     * @deprecated see {@link JwtParserBuilder#setSigningKeyResolver(SigningKeyResolver)}
      */
+    @Deprecated
     JwtParser setSigningKeyResolver(SigningKeyResolver signingKeyResolver);
 
     /**
@@ -267,9 +295,11 @@ public interface JwtParser {
      * {@link io.jsonwebtoken.JwtBuilder#compressWith(CompressionCodec) building} JWTs.</p>
      *
      * @param compressionCodecResolver the compression codec resolver used to decompress the JWT body.
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @since 0.6.0
+     * @deprecated see {@link JwtParserBuilder#setCompressionCodecResolver(CompressionCodecResolver)}
      */
+    @Deprecated
     JwtParser setCompressionCodecResolver(CompressionCodecResolver compressionCodecResolver);
 
     /**
@@ -279,9 +309,11 @@ public interface JwtParser {
      * to specify a different decoder if you desire.</p>
      *
      * @param base64UrlDecoder the decoder to use when Base64Url-decoding
-     * @return the parser for method chaining.
+     * @return the builder for method chaining.
      * @since 0.10.0
+     * @deprecated see {@link JwtParserBuilder#base64UrlDecodeWith(Decoder)}
      */
+    @Deprecated
     JwtParser base64UrlDecodeWith(Decoder<String, byte[]> base64UrlDecoder);
 
     /**
@@ -297,7 +329,9 @@ public interface JwtParser {
      * @param deserializer the deserializer to use when converting JSON Strings (UTF-8 byte arrays) into Map objects.
      * @return the builder for method chaining.
      * @since 0.10.0
+     * @deprecated see {@link JwtParserBuilder#deserializeJsonWith(Deserializer)} )}
      */
+    @Deprecated
     JwtParser deserializeJsonWith(Deserializer<Map<String,?>> deserializer);
 
     /**
