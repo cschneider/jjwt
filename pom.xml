@@ -271,6 +271,8 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <!-- japicmp will scan code for binary breaking changes, Open api/target/japicmp/japicmp.html
+                         for a report of the changes since ${jjwt.previousVersion} -->
                     <groupId>com.github.siom79.japicmp</groupId>
                     <artifactId>japicmp-maven-plugin</artifactId>
                     <version>0.13.0</version>

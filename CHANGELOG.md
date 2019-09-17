@@ -1,5 +1,26 @@
 ## Release Notes
 
+### 0.11.0
+
+This minor release:
+
+* A new JwtParserBuilder interface has been added and is the recommended way of creating a JwtParser instance.  Mutable methods in `JwtParser` will be removed before v1.0.
+    Migration to the new signatures is straightforward, for example:
+    
+    Previous Version:
+    ```java 
+     Jwts.parser()
+         .requireAudience("string")
+         .parse(jwtString)
+    ```
+    Current Version:
+    ```java
+    Jwts.parserBuilder()
+        .requireAudience("string")
+        .build()
+        .parse(jwtString)
+    ```
+
 ### 0.10.7
 
 This patch release:

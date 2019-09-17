@@ -170,14 +170,15 @@ public class DefaultJwtParserBuilder implements JwtParserBuilder {
 
     @Override
     public JwtParser build() {
-        return new DefaultJwtParser(signingKeyResolver,
-                                    key,
-                                    keyBytes,
-                                    clock,
-                                    allowedClockSkewMillis,
-                                    expectedClaims,
-                                    base64UrlDecoder,
-                                    deserializer,
-                                    compressionCodecResolver);
+        return new ImmutableJwtParser(
+                new DefaultJwtParser(signingKeyResolver,
+                                     key,
+                                     keyBytes,
+                                     clock,
+                                     allowedClockSkewMillis,
+                                     expectedClaims,
+                                     base64UrlDecoder,
+                                     deserializer,
+                                     compressionCodecResolver));
     }
 }

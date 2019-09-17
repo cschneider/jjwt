@@ -63,6 +63,7 @@ public class DefaultJwtParser implements JwtParser {
 
     private static final int MILLISECONDS_PER_SECOND = 1000;
 
+    // TODO: make the folling fields final for v1.0
     private byte[] keyBytes;
 
     private Key key;
@@ -82,6 +83,7 @@ public class DefaultJwtParser implements JwtParser {
     private long allowedClockSkewMillis = 0;
 
     /**
+     * TODO: remove this constructor before 1.0
      * @deprecated for backward compatibility only, see other constructors.
      */
     @Deprecated
@@ -105,6 +107,13 @@ public class DefaultJwtParser implements JwtParser {
         this.base64UrlDecoder = base64UrlDecoder;
         this.deserializer = deserializer;
         this.compressionCodecResolver = compressionCodecResolver;
+
+        if (this.deserializer == null) {
+            //try to find one based on the runtime environment:
+            InstanceLocator<Deserializer<Map<String, ?>>> locator =
+                Classes.newInstance("io.jsonwebtoken.impl.io.RuntimeClasspathDeserializerLocator");
+            this.deserializer = locator.getInstance();
+        }
     }
 
     @Override
@@ -246,6 +255,7 @@ public class DefaultJwtParser implements JwtParser {
     @Override
     public Jwt parse(String jwt) throws ExpiredJwtException, MalformedJwtException, SignatureException {
 
+        // TODO move this to constructor before 1.0
         if (this.deserializer == null) {
             //try to find one based on the runtime environment:
             InstanceLocator<Deserializer<Map<String, ?>>> locator =

@@ -23,6 +23,14 @@ import java.util.Date;
 import java.util.Map;
 
 /**
+ * A builder to construct a {@link JwtParser}. Example usage:
+ * <pre>{@code
+ *     Jwts.parserBuilder()
+ *         .setSigningKey(...)
+ *         .requireIssuer("https://issuer.example.com")
+ *         .build()
+ *         .parse(jwtString)
+ * }</pre>
  * @since 0.11.0
  */
 public interface JwtParserBuilder {
@@ -33,7 +41,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param id
-     * @return the parser method for chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -45,7 +53,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param subject
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -57,7 +65,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param audience
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -69,7 +77,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param issuer
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -81,7 +89,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param issuedAt
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -93,7 +101,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param expiration
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -105,7 +113,7 @@ public interface JwtParserBuilder {
      * JWT is invalid and may not be used.
      *
      * @param notBefore
-     * @return the parser for method chaining
+     * @return the parser builder for method chaining
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -118,7 +126,7 @@ public interface JwtParserBuilder {
      *
      * @param claimName
      * @param value
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      * @see MissingClaimException
      * @see IncorrectClaimException
      */
@@ -129,7 +137,7 @@ public interface JwtParserBuilder {
      * The parser uses a default Clock implementation that simply returns {@code new Date()} when called.
      *
      * @param clock a {@code Clock} object to return the timestamp to use when validating the parsed JWT.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setClock(Clock clock);
 
@@ -138,7 +146,7 @@ public interface JwtParserBuilder {
      * and {@code nbf} claims.
      *
      * @param seconds the number of seconds to tolerate for clock skew when verifying {@code exp} or {@code nbf} claims.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setAllowedClockSkewSeconds(long seconds);
 
@@ -153,7 +161,7 @@ public interface JwtParserBuilder {
      *
      * @param key the algorithm-specific signature verification key used to validate any discovered JWS digital
      *            signature.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setSigningKey(byte[] key);
 
@@ -194,7 +202,7 @@ public interface JwtParserBuilder {
      *
      * @param base64EncodedSecretKey the BASE64-encoded algorithm-specific signature verification key to use to validate
      *                               any discovered JWS digital signature.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setSigningKey(String base64EncodedSecretKey);
 
@@ -209,7 +217,7 @@ public interface JwtParserBuilder {
      *
      * @param key the algorithm-specific signature verification key to use to validate any discovered JWS digital
      *            signature.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setSigningKey(Key key);
 
@@ -238,7 +246,7 @@ public interface JwtParserBuilder {
      * methods.</p>
      *
      * @param signingKeyResolver the signing key resolver used to retrieve the signing key.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setSigningKeyResolver(SigningKeyResolver signingKeyResolver);
 
@@ -259,7 +267,7 @@ public interface JwtParserBuilder {
      * {@link io.jsonwebtoken.JwtBuilder#compressWith(CompressionCodec) building} JWTs.</p>
      *
      * @param compressionCodecResolver the compression codec resolver used to decompress the JWT body.
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder setCompressionCodecResolver(CompressionCodecResolver compressionCodecResolver);
 
@@ -270,7 +278,7 @@ public interface JwtParserBuilder {
      * to specify a different decoder if you desire.</p>
      *
      * @param base64UrlDecoder the decoder to use when Base64Url-decoding
-     * @return the parser for method chaining.
+     * @return the parser builder for method chaining.
      */
     JwtParserBuilder base64UrlDecodeWith(Decoder<String, byte[]> base64UrlDecoder);
 
