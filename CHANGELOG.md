@@ -1,5 +1,18 @@
 ## Release Notes
 
+### 0.11.0
+
+This minor release:
+
+* Moves JSON Serializer/Deserializer implementations to a different package name.
+  - `io.jsonwebtoken.io.JacksonSerializer` -> `io.jsonwebtoken.jackson.io.JacksonSerializer`
+  - `io.jsonwebtoken.io.JacksonDeserializer` -> `io.jsonwebtoken.jackson.io.JacksonDeserializer`
+  - `io.jsonwebtoken.io.OrgJsonSerializer` -> `io.jsonwebtoken.orgjson.io.OrgJsonSerializer`
+  - `io.jsonwebtoken.io.OrgJsonDeserializer` -> `io.jsonwebtoken.orgjson.io.OrgJsonDeserializer`
+
+  A backward compatibility module has been created `io.jsonwebtoken:jjwt-deprecated`, if you are compiling against 
+  these classes directly, otherwise you will be unaffected.
+
 ### 0.10.7
 
 This patch release:
