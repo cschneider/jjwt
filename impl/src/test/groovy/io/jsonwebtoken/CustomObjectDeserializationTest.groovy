@@ -1,52 +1,59 @@
+/*
+ * Copyright (C) 2019 jsonwebtoken.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.jsonwebtoken
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.jsontype.NamedType
-import com.fasterxml.jackson.databind.type.MapType
-import com.fasterxml.jackson.databind.type.TypeFactory
 import io.jsonwebtoken.io.Deserializer
-import io.jsonwebtoken.io.JacksonDeserializer
+import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import org.junit.Test
 
+import static org.hamcrest.CoreMatchers.is
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertThat
 
 class CustomObjectDeserializationTest {
 
+    /**
+     * Test parsing without and then with a custom deserializer. Ensures custom type is parsed from claims
+     */
     @Test
-    void testCustomObject() {
+    void testCustomObjectDeserialization() {
 
-        Date expectedDate = new Date()
         CustomBean customBean = new CustomBean()
         customBean.key1 = "value1"
         customBean.key2 = 42
-        customBean.nested = new NestedBean()
-        customBean.nested.nestedValue = "i am nested"
-        customBean.nested.someDate = expectedDate
 
         String jwtString = Jwts.builder().claim("cust", customBean).compact()
 
         // no custom deserialization, object is a map
         Jwt<Header, Claims> jwt = Jwts.parser().parseClaimsJwt(jwtString)
         assertNotNull jwt
-        assertEquals jwt.getBody().get("cust"), [key1: 'value1', key2: 42, nested: [nestedValue: 'i am nested', someDate: expectedDate.time]]
+        assertEquals jwt.getBody().get('cust'), [key1: 'value1', key2: 42]
 
-        // custom deserializer, `cust` field is mapped as CustomBean
-        ObjectMapper mapper = new ObjectMapper()
-//        TypeFactory typeFactory = mapper.getTypeFactory()
-//        MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, CustomBean.class)
-        mapper.registerSubtypes(new NamedType(CustomBean, "cust"))
-        Deserializer deserializer = new JacksonDeserializer(mapper)
+        // custom type for 'cust' claim
+        Deserializer deserializer = new JacksonDeserializer([cust: CustomBean])
         jwt = Jwts.parser().deserializeJsonWith(deserializer).parseClaimsJwt(jwtString)
         assertNotNull jwt
         CustomBean result = jwt.getBody().get("cust", CustomBean)
-
+        assertThat result, is(customBean)
     }
 
     static class CustomBean {
         private String key1
         private Integer key2
-        private NestedBean nested
 
         String getKey1() {
             return key1
@@ -64,33 +71,23 @@ class CustomObjectDeserializationTest {
             this.key2 = key2
         }
 
-        NestedBean getNested() {
-            return nested
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (getClass() != o.class) return false
+
+            CustomBean that = (CustomBean) o
+
+            if (key1 != that.key1) return false
+            if (key2 != that.key2) return false
+
+            return true
         }
 
-        void setNested(NestedBean nested) {
-            this.nested = nested
-        }
-    }
-
-    static class NestedBean {
-        private String nestedValue
-        private Date someDate
-
-        String getNestedValue() {
-            return nestedValue
-        }
-
-        void setNestedValue(String nestedValue) {
-            this.nestedValue = nestedValue
-        }
-
-        Date getSomeDate() {
-            return someDate
-        }
-
-        void setSomeDate(Date someDate) {
-            this.someDate = someDate
+        int hashCode() {
+            int result
+            result = (key1 != null ? key1.hashCode() : 0)
+            result = 31 * result + (key2 != null ? key2.hashCode() : 0)
+            return result
         }
     }
 }
