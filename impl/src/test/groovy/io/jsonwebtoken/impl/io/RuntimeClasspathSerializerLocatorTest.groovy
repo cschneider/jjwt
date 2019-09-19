@@ -28,7 +28,9 @@ import static org.junit.Assert.*
 
 class RuntimeClasspathSerializerLocatorTest {
 
-    private static final String TEST_SERVICE_DESCRIPTOR = "io.jsonwebtoken.io.Serializer.test.orgjson"
+    private static final String TEST_SERVICE_DESCRIPTOR_ORGJSON = "io.jsonwebtoken.io.Serializer.test.orgjson"
+
+    private static final String TEST_SERVICE_DESCRIPTOR_GSON = "io.jsonwebtoken.io.Serializer.test.gson"
 
     private ClassLoader originalClassLoader
 
@@ -107,7 +109,7 @@ class RuntimeClasspathSerializerLocatorTest {
 
     @Test
     void testOrgJson() {
-        prepareFakeServiceClassLoader()
+        prepareFakeServiceClassLoader(TEST_SERVICE_DESCRIPTOR_ORGJSON)
 
         def serializer = new RuntimeClasspathSerializerLocator().getInstance()
         assertTrue serializer instanceof OrgJsonSerializer
@@ -115,20 +117,9 @@ class RuntimeClasspathSerializerLocatorTest {
 
     @Test
     void testGson() {
-        def locator = new RuntimeClasspathSerializerLocator() {
-            @Override
-            protected boolean isAvailable(String fqcn) {
-                if (JacksonSerializer.class.getName().equals(fqcn)) {
-                    return false //skip it to allow the Gson impl to be created
-                }
-                if (OrgJsonSerializer.class.getName().equals(fqcn)) {
-                    return false //skip it to allow the Gson impl to be created
-                }
-                return super.isAvailable(fqcn)
-            }
-        }
+        prepareFakeServiceClassLoader(TEST_SERVICE_DESCRIPTOR_GSON)
 
-        def serializer = locator.getInstance()
+        def serializer = new RuntimeClasspathSerializerLocator().getInstance()
         assertTrue serializer instanceof GsonSerializer
     }
 
@@ -137,8 +128,8 @@ class RuntimeClasspathSerializerLocatorTest {
         Thread.currentThread().setContextClassLoader(new NoServiceDescriptorClassLoader(originalClassLoader))
     }
 
-    private void prepareFakeServiceClassLoader() {
+    private void prepareFakeServiceClassLoader(String fakeDescriptor) {
         originalClassLoader = Thread.currentThread().getContextClassLoader()
-        Thread.currentThread().setContextClassLoader(new FakeServiceDescriptorClassLoader(originalClassLoader, TEST_SERVICE_DESCRIPTOR))
+        Thread.currentThread().setContextClassLoader(new FakeServiceDescriptorClassLoader(originalClassLoader, fakeDescriptor))
     }
 }
