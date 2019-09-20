@@ -34,22 +34,20 @@ class CompressionCodecsTest {
 
         mockStatic(Services)
 
-        def factory = createMock(CompressionCodecFactory)
-
-        expect(Services.loadFirst(CompressionCodecFactory)).andReturn(factory)
-
         def deflate = createMock(CompressionCodec)
         def gzip = createMock(CompressionCodec)
 
-        expect(factory.deflateCodec()).andReturn(deflate)
-        expect(factory.gzipCodec()).andReturn(gzip)
+        // any times, these are loaded from a loop, getAlgorithmName could be at most twice
+        expect(deflate.getAlgorithmName()).andReturn("DEF").times(1, 2)
+        expect(gzip.getAlgorithmName()).andReturn("GZIP").times(1, 2)
+        expect(Services.loadAllAvailableImplementations(CompressionCodec)).andReturn([gzip, deflate])
 
-        replay Services, factory, deflate, gzip
+        replayAll Services, deflate, gzip
 
         assertSame deflate, CompressionCodecs.DEFLATE
         assertSame gzip, CompressionCodecs.GZIP
 
-        verify Services, factory, deflate, gzip
+        verify Services, deflate, gzip
 
         //test coverage for private constructor:
         new CompressionCodecs()

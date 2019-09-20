@@ -45,7 +45,7 @@ public final class Services {
         if (serviceLoader.iterator().hasNext()) {
             return serviceLoader.iterator().next();
         } else {
-            throw new ImplementationNotFoundException("No implementation of " + spi.getName() + " found on the classpath. Make sure to include an implementation of jjwt-api.");
+            throw new ImplementationNotFoundException(spi);
         }
     }
 }

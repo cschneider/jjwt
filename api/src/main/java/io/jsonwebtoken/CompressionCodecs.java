@@ -15,7 +15,10 @@
  */
 package io.jsonwebtoken;
 
+import io.jsonwebtoken.lang.ImplementationNotFoundException;
 import io.jsonwebtoken.lang.Services;
+
+import java.util.Collection;
 
 /**
  * Provides default implementations of the {@link CompressionCodec} interface.
@@ -26,8 +29,6 @@ import io.jsonwebtoken.lang.Services;
  */
 public final class CompressionCodecs {
 
-    private static final CompressionCodecFactory FACTORY = Services.loadFirst(CompressionCodecFactory.class);
-
     private CompressionCodecs() {
     } //prevent external instantiation
 
@@ -35,7 +36,7 @@ public final class CompressionCodecs {
      * Codec implementing the <a href="https://tools.ietf.org/html/rfc7518">JWA</a> standard
      * <a href="https://en.wikipedia.org/wiki/DEFLATE">deflate</a> compression algorithm
      */
-    public static final CompressionCodec DEFLATE = FACTORY.deflateCodec();
+    public static final CompressionCodec DEFLATE;
 
     /**
      * Codec implementing the <a href="https://en.wikipedia.org/wiki/Gzip">gzip</a> compression algorithm.
@@ -44,6 +45,21 @@ public final class CompressionCodecs {
      * that all parties accessing the token support the gzip algorithm.</p>
      * <p>If you're concerned about compatibility, the {@link #DEFLATE DEFLATE} code is JWA standards-compliant.</p>
      */
-    public static final CompressionCodec GZIP = FACTORY.gzipCodec();
+    public static final CompressionCodec GZIP;
 
+    static {
+        // lookup expected CompressionCodec by name, if not found throw ImplementationNotFoundException
+        Collection<CompressionCodec> compressionCodecs = Services.loadAllAvailableImplementations(CompressionCodec.class);
+        DEFLATE = findCodec("DEF", compressionCodecs);
+        GZIP = findCodec("GZIP", compressionCodecs);
+    }
+
+    private static CompressionCodec findCodec(String name, Collection<CompressionCodec> compressionCodecs) {
+        for (CompressionCodec codec : compressionCodecs) {
+            if (name.equals(codec.getAlgorithmName())) {
+                return codec;
+            }
+        }
+        throw new ImplementationNotFoundException(CompressionCodec.class, name);
+    }
 }
