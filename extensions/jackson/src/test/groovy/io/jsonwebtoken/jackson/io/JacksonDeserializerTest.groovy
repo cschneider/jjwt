@@ -18,6 +18,7 @@ package io.jsonwebtoken.jackson.io
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.io.DeserializationException
 import io.jsonwebtoken.jackson.io.stubs.CustomBean
+import io.jsonwebtoken.io.Base64Encoder
 import io.jsonwebtoken.lang.Strings
 import org.junit.Test
 
@@ -136,6 +137,6 @@ class JacksonDeserializerTest {
     }
 
     private String base64(String input) {
-        return Base64.encoder.encodeToString(input.getBytes('UTF-8'))
+        return new Base64Encoder().encode(input.getBytes('UTF-8'))
     }
 }
