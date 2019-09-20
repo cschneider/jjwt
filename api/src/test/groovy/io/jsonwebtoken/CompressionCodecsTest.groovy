@@ -15,6 +15,7 @@
  */
 package io.jsonwebtoken
 
+import io.jsonwebtoken.lang.ImplementationNotFoundException
 import io.jsonwebtoken.lang.Services
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,6 +24,7 @@ import org.powermock.modules.junit4.PowerMockRunner
 
 import static org.easymock.EasyMock.expect
 import static org.junit.Assert.assertSame
+import static org.junit.Assert.fail
 import static org.powermock.api.easymock.PowerMock.*
 
 @RunWith(PowerMockRunner.class)
@@ -48,8 +50,38 @@ class CompressionCodecsTest {
         assertSame gzip, CompressionCodecs.GZIP
 
         verify Services, deflate, gzip
+    }
 
+    @Test
+    void testPrivateConstructor() {
         //test coverage for private constructor:
         new CompressionCodecs()
+    }
+
+    @Test
+    @PrepareForTest([Services, CompressionCodecs])
+    void testNotFoundTest() {
+
+        mockStatic(Services)
+        expect(Services.loadAllAvailableImplementations(CompressionCodec)).andReturn([])
+        replayAll(Services)
+
+        try {
+            CompressionCodecs.DEFLATE
+            fail("Expected ImplementationNotFoundException when loading: CompressionCodecs.DEFLATE");
+        } catch (ImplementationNotFoundException e) {
+            // expected
+        } catch (ExceptionInInitializerError e) {
+            // This is a powermock oddity
+            // we purposely want to test the failure initializing this static field, which may result in a ExceptionInInitializerError
+            if (e.getCause() instanceof ImplementationNotFoundException) {
+                // expected
+            } else {
+                throw e
+            }
+        }
+
+
+
     }
 }
