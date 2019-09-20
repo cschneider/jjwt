@@ -4,7 +4,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.SecretKey;
 
+/**
+ * Implementations of KeyGenerator will generate {@link SecretKey} based for a given {@link SignatureAlgorithm}.
+ *
+ * @since 0.11.0
+ */
 public interface KeyGenerator {
+
+    /**
+     * Returns true if the SignatureAlgorithm {@code alg} is supported by this KeyGenerator.
+     * @param alg SignatureAlgorithm to check
+     * @return Returns true if the SignatureAlgorithm {@code alg} is supported by this KeyGenerator.
+     */
     boolean supports(SignatureAlgorithm alg);
 
     /**
