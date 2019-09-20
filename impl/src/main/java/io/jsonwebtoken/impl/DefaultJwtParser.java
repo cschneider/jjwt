@@ -40,6 +40,7 @@ import io.jsonwebtoken.impl.compression.DefaultCompressionCodecResolver;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.jsonwebtoken.impl.crypto.JwtSignatureValidator;
 import io.jsonwebtoken.impl.io.InstanceLocator;
+import io.jsonwebtoken.impl.io.RuntimeClasspathDeserializerLocator;
 import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.DeserializationException;
@@ -222,8 +223,7 @@ public class DefaultJwtParser implements JwtParser {
 
         if (this.deserializer == null) {
             //try to find one based on the runtime environment:
-            InstanceLocator<Deserializer<Map<String, ?>>> locator =
-                Classes.newInstance("io.jsonwebtoken.impl.io.RuntimeClasspathDeserializerLocator");
+            InstanceLocator<Deserializer<Map<String, ?>>> locator = new RuntimeClasspathDeserializerLocator<>();
             this.deserializer = locator.getInstance();
         }
 
