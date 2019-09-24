@@ -28,10 +28,10 @@ import static org.junit.Assert.fail
 import static org.powermock.api.easymock.PowerMock.*
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest([Services, CompressionCodecs])
 class CompressionCodecsTest {
 
     @Test
+    @PrepareForTest([Services, CompressionCodecs])
     void testStatics() {
 
         mockStatic(Services)
@@ -50,10 +50,7 @@ class CompressionCodecsTest {
         assertSame gzip, CompressionCodecs.GZIP
 
         verify Services, deflate, gzip
-    }
 
-    @Test
-    void testPrivateConstructor() {
         //test coverage for private constructor:
         new CompressionCodecs()
     }
