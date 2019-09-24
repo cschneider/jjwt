@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.io.DeserializationException
 import io.jsonwebtoken.jackson.io.stubs.CustomBean
 import io.jsonwebtoken.io.Base64Encoder
+import io.jsonwebtoken.lang.Maps
 import io.jsonwebtoken.lang.Strings
 import org.junit.Test
 
@@ -100,7 +101,7 @@ class JacksonDeserializerTest {
             )
 
         def expected = [oneKey: "oneValue", custom: expectedCustomBean]
-        def result = new JacksonDeserializer([custom: CustomBean]).deserialize(serialized)
+        def result = new JacksonDeserializer(Maps.of("custom", CustomBean)).deserialize(serialized)
         assertEquals expected, result
     }
 
