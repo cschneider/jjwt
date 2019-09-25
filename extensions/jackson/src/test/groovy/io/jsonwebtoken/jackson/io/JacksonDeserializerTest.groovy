@@ -101,7 +101,7 @@ class JacksonDeserializerTest {
             )
 
         def expected = [oneKey: "oneValue", custom: expectedCustomBean]
-        def result = new JacksonDeserializer(Maps.of("custom", CustomBean)).deserialize(serialized)
+        def result = new JacksonDeserializer(Maps.of("custom", CustomBean).build()).deserialize(serialized)
         assertEquals expected, result
     }
 

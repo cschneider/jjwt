@@ -12,8 +12,8 @@ This minor release:
 
   A backward compatibility module has been created `io.jsonwebtoken:jjwt-deprecated`, if you are compiling against 
   these classes directly, otherwise you will be unaffected.
-* Adds support for custom types when deserializing with Jackson. To use configure your parser with `Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(Maps.of("claimName", YourType.class))).build()`.
-* Adds `io.jsonwebtoken.lang.Maps` utility class to make creation of small maps easier, similar to Java 11's `Map.of()`
+* Adds support for custom types when deserializing with Jackson. To use configure your parser with `Jwts.parserBuilder().deserializeJsonWith(new JacksonDeserializer(Maps.of("claimName", YourType.class).build())).build()`.
+* Adds `io.jsonwebtoken.lang.Maps` utility class to make creation of maps fluent.
 
 ### 0.10.7
 

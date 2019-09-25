@@ -24,24 +24,15 @@ class MapsTest {
 
     @Test
     void testSingleMapOf() {
-        assertThat Maps.of("aKey", "aValue"), is([aKey: "aValue"])
+        assertThat Maps.of("aKey", "aValue").build(), is([aKey: "aValue"])
     }
 
     @Test
-    void testTwoMapOf() {
-        assertThat Maps.of("aKey1", "aValue1", "aKey2", "aValue2"),
-                is([aKey1: "aValue1", aKey2: "aValue2"])
-    }
-
-    @Test
-    void testThreeMapOf() {
-        assertThat Maps.of("aKey1", "aValue1", "aKey2", "aValue2", "aKey3", "aValue3"),
+    void testMapOfAnd() {
+        assertThat Maps.of("aKey1", "aValue1")
+                        .and("aKey2", "aValue2")
+                        .and("aKey3", "aValue3")
+                        .build(),
                 is([aKey1: "aValue1", aKey2: "aValue2", aKey3: "aValue3"])
-    }
-
-    @Test
-    void testFourMapOf() {
-        assertThat Maps.of("aKey1", "aValue1", "aKey2", "aValue2", "aKey3", "aValue3", "aKey4", "aValue4"),
-                is([aKey1: "aValue1", aKey2: "aValue2", aKey3: "aValue3", aKey4: "aValue4"])
     }
 }

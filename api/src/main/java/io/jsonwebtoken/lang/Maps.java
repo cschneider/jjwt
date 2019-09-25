@@ -28,77 +28,60 @@ public final class Maps {
     private Maps() {} //prevent instantiation
 
     /**
-     * Creates a map with a single entry.
-     * @param key1 the maps key
-     * @param value1 the maps value
+     * Creates a new map builder with a single entry.
+     * <p> Typical usage: <pre>{@code
+     * Map<K,V> result = Maps.of("key1", value1)
+     *     .and("key2", value2)
+     *     // ...
+     *     .build();
+     * }</pre>
+     * @param key the key of an map entry to be added
+     * @param value the value of map entry to be added
      * @param <K> the maps key type
      * @param <V> the maps value type
-     * @return an unmodifiable map with a single entry.
+     * Creates a new map builder with a single entry.
      */
-    public static <K, V> Map<K, V> of(K key1, V value1) {
-        HashMap<K, V> result = new HashMap<>(capacity(1));
-        result.put(key1, value1);
-        return Collections.unmodifiableMap(result);
+    public static <K, V> MapBuilder<K, V> of(K key, V value) {
+        return new HashMapBuilder<K, V>().and(key, value);
     }
 
     /**
-     * Creates a map with two entries.
-     * @param key1 the maps key
-     * @param value1 the maps value
+     * Utility Builder class for fluently building maps:
+     * <p> Typical usage: <pre>{@code
+     * Map<K,V> result = Maps.of("key1", value1)
+     *     .and("key2", value2)
+     *     // ...
+     *     .build();
+     * }</pre>
      * @param <K> the maps key type
      * @param <V> the maps value type
-     * @return an unmodifiable map with two entries.
      */
-    public static <K, V> Map<K, V> of(K key1, V value1, K key2, V value2) {
-        HashMap<K, V> result = new HashMap<>(capacity(2));
-        result.put(key1, value1);
-        result.put(key2, value2);
-        return Collections.unmodifiableMap(result);
+    public interface MapBuilder<K, V> {
+        /**
+         * Add a new entry to this map builder
+         * @param key the key of an map entry to be added
+         * @param value the value of map entry to be added
+         * @return the current MapBuilder to allow for method chaining.
+         */
+        MapBuilder and(K key, V value);
+
+        /**
+         * Returns a the resulting Map object from this MapBuilder.
+         * @return Returns a the resulting Map object from this MapBuilder.
+         */
+        Map<K, V> build();
     }
 
-    /**
-     * Creates a map with three entries.
-     * @param key1 the maps key
-     * @param value1 the maps value
-     * @param <K> the maps key type
-     * @param <V> the maps value type
-     * @return an unmodifiable map with three entries.
-     */
-    public static <K, V> Map<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3) {
-        HashMap<K, V> result = new HashMap<>(capacity(3));
-        result.put(key1, value1);
-        result.put(key2, value2);
-        result.put(key3, value3);
-        return Collections.unmodifiableMap(result);
-    }
+    private static class HashMapBuilder<K, V> implements MapBuilder<K, V> {
 
-    /**
-     * Creates a map with four entries.
-     * @param key1 the maps key
-     * @param value1 the maps value
-     * @param <K> the maps key type
-     * @param <V> the maps value type
-     * @return an unmodifiable map with four entries.
-     */
-    public static <K, V> Map<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4) {
-        HashMap<K, V> result = new HashMap<>(capacity(4));
-        result.put(key1, value1);
-        result.put(key2, value2);
-        result.put(key3, value3);
-        result.put(key4, value4);
-        return Collections.unmodifiableMap(result);
-    }
+        private final Map<K, V> data = new HashMap<>();
 
-    /**
-     * Returns a capacity that is sufficient to keep the map from being resized as long as it grows no
-     * larger than expectedSize and the load factor is ≥ its default (0.75).
-     *
-     * <p> Simplified version of capacity calculation from <a href="https://github.com/google/guava/blob/aa73da81be1c3dfd41b10ea6318970d279559b1c/guava/src/com/google/common/collect/Maps.java#L325-L337">Guava</a>
-     */
-    private static int capacity(int expectedSize) {
-        // This is the calculation used in JDK8 to resize when a putAll
-        // happens; it seems to be the most conservative calculation we
-        // can make.  0.75 is the default load factor.
-        return (int) ((float) expectedSize / 0.75F + 1.0F);
+        public MapBuilder and(K key, V value) {
+            data.put(key, value);
+            return this;
+        }
+        public Map<K, V> build() {
+            return Collections.unmodifiableMap(data);
+        }
     }
 }
